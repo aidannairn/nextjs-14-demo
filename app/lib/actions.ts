@@ -15,13 +15,13 @@ const InvoiceSchema = z.object({
 const CreateInvoice = InvoiceSchema.omit({ id: true, date: true })
 
 export async function createInvoice(formData: FormData) {
-  /* const rawFormData = {
+  const rawFormData = {
     customerId: formData.get('customerId'),
     amount: formData.get('amount'),
     status: formData.get('status'),
-  } // Can be refactored to the following line */
+  } // Can be refactored to the following line
 
-  const rawFormData = Object.fromEntries(formData.entries())
+  // const rawFormData = Object.fromEntries(formData.entries())
   const { customerId, amount, status } = CreateInvoice.parse(rawFormData)
 
   /* It's usually good practice to store monetary values in cents in your database to eliminate JavaScript floating-point errors and ensure greater accuracy.  */
@@ -38,7 +38,7 @@ export async function createInvoice(formData: FormData) {
   redirect('/dashboard/invoices')
 }
 
-const UpdateInvoice = InvoiceSchema.omit({ date: true })
+const UpdateInvoice = InvoiceSchema.omit({ date: true, id: true })
 export async function updateInvoice(id: string, formData: FormData) {
   const { customerId, amount, status } = UpdateInvoice.parse({
     customerId: formData.get('customerId'),
@@ -56,4 +56,9 @@ export async function updateInvoice(id: string, formData: FormData) {
 
   revalidatePath('/dashboard/invoices')
   redirect('/dashboard/invoices')
+}
+
+export async function deleteInvoice(id: string) {
+  await sql`DELETE FROM invoices WHERE id = ${id}`;
+  revalidatePath('/dashboard/invoices');
 }

@@ -1,6 +1,7 @@
 import Form from '@/app/ui/invoices/edit-form'
 import Breadcrumbs from '@/app/ui/invoices/breadcrumbs'
 import { fetchCustomers, fetchInvoiceById } from '@/app/lib/data'
+import { notFound } from 'next/navigation'
 
 interface Props {
   params: {
@@ -15,9 +16,7 @@ export default async function Page({ params }: Props) {
     fetchCustomers(),
   ])
 
-  if (invoice === undefined) {
-    throw new Error(`An invoice with ID "${id}" could not be found.`)
-  }
+  if (invoice === undefined) notFound()
 
   return (
     <main>

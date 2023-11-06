@@ -1,3 +1,4 @@
+import { Metadata } from 'next'
 import { Suspense } from 'react'
 
 import { CreateInvoice } from '@/app/ui/invoices/buttons'
@@ -13,6 +14,10 @@ interface Props {
     query: string
     page: string
   }
+}
+
+export const metadata: Metadata = {
+  title: 'Invoices',
 }
 
 export default async function Page({ searchParams }: Props) {
